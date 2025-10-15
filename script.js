@@ -85,3 +85,26 @@ document.getElementById("unmute").addEventListener("click",()=>{
   iframe.src=iframe.src.replace("mute=1","mute=0");
   document.getElementById("unmute").style.display="none";
 });
+// 🌸 Smooth fade-in for background music
+window.addEventListener("DOMContentLoaded", () => {
+  const audio = document.getElementById("bg-music");
+  if (!audio) return;
+
+  // Start volume very low
+  audio.volume = 0;
+  audio.play().catch(() => {
+    console.log("Autoplay prevented — user must interact first.");
+  });
+
+  // Gradually raise volume over 5 seconds
+  let vol = 0;
+  const fade = setInterval(() => {
+    if (vol < 1) {
+      vol += 0.02;          // speed of fade-in
+      audio.volume = vol;
+    } else {
+      clearInterval(fade);
+    }
+  }, 100); // update every 100 ms
+});
+
