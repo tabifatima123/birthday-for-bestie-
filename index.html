@@ -4,10 +4,13 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Happy Birthday My Strong Baby 💖</title>
+
+  <!-- Styles & Fonts -->
   <link rel="stylesheet" href="style.css" />
-  <link href="https://fonts.googleapis.com/css2?family=Great+Vibes&family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Great+Vibes&family=Poppins:wght@300;400;600&display=swap" rel="stylesheet" />
 </head>
 <body>
+  <!-- Cinematic Intro -->
   <div class="intro">
     <canvas id="hearts"></canvas>
     <div class="intro-text" id="introText1">Happy Birthday my strong baby 💖</div>
@@ -15,27 +18,29 @@
     <div class="intro-text" id="introText3">Happy Birthday Sonu 💫</div>
   </div>
 
-  <section id="gallery" class="hidden">
+  <!-- 3D Gallery -->
+  <section id="gallery" class="hidden" aria-label="3D Photo Gallery">
     <h1 class="glow-text">Happy Birthday Sara 💖</h1>
     <div id="drag-container">
       <div id="spin-container">
-        <!-- 10 uploaded screenshots -->
-        <img src="Screenshot (90).png" alt="">
-        <img src="Screenshot (92).png" alt="">
-        <img src="Screenshot (94).png" alt="">
-        <img src="Screenshot (85).png" alt="">
-        <img src="Screenshot (88).png" alt="">
-        <img src="Screenshot (91).png" alt="">
-        <img src="Screenshot (84).png" alt="">
-        <img src="Screenshot (83).png" alt="">
-        <img src="Screenshot (80).png" alt="">
-        <img src="Screenshot (77).png" alt="">
+        <!-- Your 10 uploaded screenshots (now pointing to /images) -->
+        <img src="images/Screenshot (90).png" alt="Photo 1 of Sara">
+        <img src="images/Screenshot (92).png" alt="Photo 2 of Sara">
+        <img src="images/Screenshot (94).png" alt="Photo 3 of Sara">
+        <img src="images/Screenshot (85).png" alt="Photo 4 of Sara">
+        <img src="images/Screenshot (88).png" alt="Photo 5 of Sara">
+        <img src="images/Screenshot (91).png" alt="Photo 6 of Sara">
+        <img src="images/Screenshot (84).png" alt="Photo 7 of Sara">
+        <img src="images/Screenshot (83).png" alt="Photo 8 of Sara">
+        <img src="images/Screenshot (80).png" alt="Photo 9 of Sara">
+        <img src="images/Screenshot (77).png" alt="Photo 10 of Sara">
       </div>
       <div id="ground"></div>
     </div>
   </section>
 
-  <section id="message" class="hidden">
+  <!-- Heartfelt Message -->
+  <section id="message" class="hidden" aria-label="Birthday Message">
     <div class="message-content">
       <p>Happy Birthday, my strong baby — my one and only Sonny. 💖 Every year when this day comes, I find myself smiling a little extra, because it’s the day the world was gifted with you.</p>
       <p>You’re not just my best friend — you’re my calm and my chaos, my laughter and my peace, my person through every mood swing, every late-night talk, and every moment that life threw at us.</p>
@@ -49,17 +54,15 @@
     <footer>Made with love just for you 💕</footer>
   </section>
 
-  <!-- YouTube background music -->
-  <iframe id="bg-music"
-    src="https://www.youtube.com/embed/ae01DTD27qQ?autoplay=1&mute=1&loop=1&playlist=ae01DTD27qQ"
-    allow="autoplay" frameborder="0"></iframe>
-  <div id="unmute">🔊 Tap to unmute</div>
+  <!-- Background music (MP3 in /music). Keep muted default; script handles fade/unmute -->
+  <audio id="bg-music" autoplay loop preload="auto" muted>
+    <source src="music/birthday.mp3" type="audio/mpeg">
+  </audio>
+  <div id="unmute" aria-label="Unmute music" role="button" tabindex="0">🔊 Tap to unmute</div>
 
-  <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.9.3/dist/confetti.browser.min.js"></script>
-  <script src="script.js"></script>
-  <!-- Background music -->
-<audio id="bg-music" autoplay loop>
-  <source src="music/birthday.mp3" type="audio/mpeg">
-</audio>
+  <!-- Confetti library + your main script -->
+  <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.9.3/dist/confetti.browser.min.js" defer></script>
+  <script src="script.js" defer></script>
 </body>
 </html>
+
