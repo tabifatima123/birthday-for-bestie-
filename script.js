@@ -1,6 +1,6 @@
 // --- Single song: ehdewafa.mp3 ---
 const audio = document.getElementById("bg-music");
-audio.src = "music/ehdewafa.mp3 , "Shayar.mp3";
+audio.src = "music/ehdewafa.mp3 , "music/Shayar.mp3";
 
 // Function to play audio safely
 function playAudio() {
