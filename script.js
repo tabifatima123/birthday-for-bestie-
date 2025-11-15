@@ -161,3 +161,39 @@ window.addEventListener("DOMContentLoaded", () => {
     // Autoplay blocked — keep the unmute pill visible
   });
 });
+// Playlist for two songs
+const songs = [
+  "music/ehdewafa.mp3",
+  "music/shayar.mp3"
+];
+
+const audio = document.getElementById("bg-music");
+let currentSong = 0;
+
+// Function to play a song by index
+function playSong(index) {
+  audio.src = songs[index];
+  audio.play().catch(() => {});
+}
+
+// Play the first song
+playSong(currentSong);
+
+// When a song ends, play the next one
+audio.addEventListener("ended", () => {
+  currentSong++;
+  if (currentSong < songs.length) {
+    playSong(currentSong);
+  } else {
+    currentSong = 0; // optional: loop back to first song
+    playSong(currentSong);
+  }
+});
+
+// Unmute for mobile / autoplay
+document.getElementById("unmute").addEventListener("click", () => {
+  audio.muted = false;
+  audio.volume = 1;
+  audio.play().catch(() => {});
+  document.getElementById("unmute").style.display = "none";
+});
