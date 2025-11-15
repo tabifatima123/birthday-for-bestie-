@@ -1,25 +1,41 @@
-// --- Single song: ehdewafa.mp3 ---
-const audio = document.getElementById("bg-music");
-audio.src = "music/ehdewafa.mp3 , "music/Shayar.mp3";
+// --- Playlist for two songs ---
+const songs = [
+  "music/ehdewafa.mp3",
+  "music/shayar.mp3"
+];
 
-// Function to play audio safely
-function playAudio() {
-  audio.muted = false;
-  audio.volume = 1;
+const audio = document.getElementById("bg-music");
+let currentSong = 0;
+
+// Function to play song by index
+function playSong(index) {
+  audio.src = songs[index];
   audio.play().catch(() => {
-    console.log("Autoplay blocked. Tap anywhere to start music.");
+    console.log("Autoplay blocked. Tap to start music.");
   });
 }
 
-// Play on page load (may be blocked on mobile)
-playAudio();
+// Start the first song
+playSong(currentSong);
 
-// Unmute & play on first click anywhere (mobile-safe)
+// When a song ends, play the next
+audio.addEventListener("ended", () => {
+  currentSong++;
+  if (currentSong >= songs.length) currentSong = 0; // loop playlist
+  playSong(currentSong);
+});
+
+// --- Unmute for mobile/tap ---
 document.getElementById("unmute").addEventListener("click", () => {
-  playAudio();
+  audio.muted = false;
+  audio.volume = 1;
+  audio.play().catch(() => {});
   document.getElementById("unmute").style.display = "none";
 });
-document.addEventListener('click', playAudio, { once: true });
+document.addEventListener('click', () => {
+  audio.muted = false;
+  audio.play().catch(() => {});
+}, { once: true });
 
 // --- Intro Fade Sequence ---
 const texts = ["introText1", "introText2", "introText3"];
@@ -120,3 +136,4 @@ function confettiBurst() {
     if (Date.now() < end) requestAnimationFrame(frame);
   })();
 }
+
