@@ -1,44 +1,25 @@
-// --- Playlist ---
-const songs = [
-  "music/ehdewafa.mp3",
-  "music/shayar.mp3"
-];
-
+// --- Single song: ehdewafa.mp3 ---
 const audio = document.getElementById("bg-music");
-let currentSong = 0;
+audio.src = "music/ehdewafa.mp3";
 
-// Play song by index
-function playSong(index) {
-  audio.src = songs[index];
+// Function to play audio safely
+function playAudio() {
+  audio.muted = false;
+  audio.volume = 1;
   audio.play().catch(() => {
-    // Autoplay blocked, wait for user
-    console.log("Autoplay blocked, waiting for user interaction");
+    console.log("Autoplay blocked. Tap anywhere to start music.");
   });
 }
 
-// Start first song
-playSong(currentSong);
+// Play on page load (may be blocked on mobile)
+playAudio();
 
-// Play next song on ended
-audio.addEventListener("ended", () => {
-  currentSong++;
-  if (currentSong >= songs.length) currentSong = 0;
-  playSong(currentSong);
-});
-
-// --- Unmute & start audio for mobile ---
-function unmuteAndPlay() {
-  audio.muted = false;
-  audio.volume = 1;
-  audio.play().catch(() => {});
+// Unmute & play on first click anywhere (mobile-safe)
+document.getElementById("unmute").addEventListener("click", () => {
+  playAudio();
   document.getElementById("unmute").style.display = "none";
-}
-
-// Attach unmute to button
-document.getElementById("unmute").addEventListener("click", unmuteAndPlay);
-
-// Optional: also unmute/play on first click anywhere
-document.addEventListener('click', unmuteAndPlay, { once: true });
+});
+document.addEventListener('click', playAudio, { once: true });
 
 // --- Intro Fade Sequence ---
 const texts = ["introText1", "introText2", "introText3"];
