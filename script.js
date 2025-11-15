@@ -26,6 +26,14 @@ window.onload = () => {
   showNextIntro();
   heartAnim();
 };
+document.addEventListener('click', () => {
+  const audio = document.getElementById('bg-music');
+  if (audio) {
+    audio.muted = false;
+    audio.volume = 1;
+    audio.play().catch(() => {});
+  }
+}, { once: true });
 
 // --- Floating hearts ---
 function heartAnim() {
