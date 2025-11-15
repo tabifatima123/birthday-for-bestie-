@@ -4,14 +4,6 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Happy Birthday My Strong Baby 💖</title>
-<script>
-  document.addEventListener('click', () => {
-    const a = document.getElementById('bg-music');
-    a.muted = false;
-    a.volume = 1;
-    a.play().catch(() => {});
-  }, { once: true });
-</script>
 
   <!-- Styles & Fonts -->
   <link rel="stylesheet" href="style.css" />
@@ -47,6 +39,8 @@
 
   <!-- Heartfelt Message -->
   <section id="message" class="hidden" aria-label="Birthday Message">
+    <div class="message-content">
+    <section id="message" class="hidden" aria-label="Birthday Message">
     <div class="message-content">
       <p>
         وقت تمہیں زندہ رکھے
@@ -104,14 +98,18 @@
     <footer>Made with love just for you at 9th august 2025 💕</footer>
   </section>
 
-  <!-- Background music (MP3 in /music). Keep muted default; script handles fade/unmute -->
-  <audio id="bg-music" autoplay preload="auto"></audio>
-<div id="unmute" aria-label="Unmute music" role="button" tabindex="0">🔊 Tap to unmute</div>
+    </div>
+    <footer>Made with love just for you at 9th August 2025 💕</footer>
+  </section>
 
+  <!-- Background music -->
+  <audio id="bg-music" autoplay preload="auto"></audio>
+  <div id="unmute" aria-label="Unmute music" role="button" tabindex="0">🔊 Tap to unmute</div>
 
   <!-- Confetti library + your main script -->
   <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.9.3/dist/confetti.browser.min.js" defer></script>
   <script src="script.js" defer></script>
 </body>
 </html>
+
 
