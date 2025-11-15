@@ -4,6 +4,14 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Happy Birthday My Strong Baby 💖</title>
+<script>
+  document.addEventListener('click', () => {
+    const a = document.getElementById('bg-music');
+    a.muted = false;
+    a.volume = 1;
+    a.play().catch(() => {});
+  }, { once: true });
+</script>
 
   <!-- Styles & Fonts -->
   <link rel="stylesheet" href="style.css" />
