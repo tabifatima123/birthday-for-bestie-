@@ -1,65 +1,46 @@
-// --- Playlist with crossfade ---
-const songs = ["music/ehdewafa.mp3", "music/shayar.mp3"];
+// --- Playlist ---
+const songs = [
+  "music/ehdewafa.mp3",
+  "music/shayar.mp3"
+];
+
 const audio = document.getElementById("bg-music");
 let currentSong = 0;
-const fadeDuration = 2000; // 2 seconds fade
 
+// Play song by index
 function playSong(index) {
   audio.src = songs[index];
-  audio.volume = 0;
-  audio.play().catch(() => {});
-  fadeIn(audio);
-}
-
-function fadeIn(audioEl) {
-  let vol = 0;
-  const step = 0.02;
-  const interval = setInterval(() => {
-    vol = Math.min(1, vol + step);
-    audioEl.volume = vol;
-    if (vol >= 1) clearInterval(interval);
-  }, fadeDuration * step);
-}
-
-function fadeOut(audioEl, callback) {
-  let vol = audioEl.volume;
-  const step = 0.02;
-  const interval = setInterval(() => {
-    vol = Math.max(0, vol - step);
-    audioEl.volume = vol;
-    if (vol <= 0) {
-      clearInterval(interval);
-      if (callback) callback();
-    }
-  }, fadeDuration * step);
+  audio.play().catch(() => {
+    // Autoplay blocked, wait for user
+    console.log("Autoplay blocked, waiting for user interaction");
+  });
 }
 
 // Start first song
 playSong(currentSong);
 
-// When song ends, crossfade to next
+// Play next song on ended
 audio.addEventListener("ended", () => {
-  fadeOut(audio, () => {
-    currentSong = (currentSong + 1) % songs.length;
-    playSong(currentSong);
-  });
+  currentSong++;
+  if (currentSong >= songs.length) currentSong = 0;
+  playSong(currentSong);
 });
 
-// --- Unmute for mobile / tap ---
-document.getElementById("unmute").addEventListener("click", () => {
+// --- Unmute & start audio for mobile ---
+function unmuteAndPlay() {
   audio.muted = false;
-  audio.volume = 0;
+  audio.volume = 1;
   audio.play().catch(() => {});
-  fadeIn(audio);
   document.getElementById("unmute").style.display = "none";
-});
+}
 
-document.addEventListener('click', () => {
-  audio.muted = false;
-  audio.play().catch(() => {});
-}, { once: true });
+// Attach unmute to button
+document.getElementById("unmute").addEventListener("click", unmuteAndPlay);
 
-// --- Intro fade sequence ---
+// Optional: also unmute/play on first click anywhere
+document.addEventListener('click', unmuteAndPlay, { once: true });
+
+// --- Intro Fade Sequence ---
 const texts = ["introText1", "introText2", "introText3"];
 let current = 0;
 
@@ -80,9 +61,15 @@ function showNextIntro() {
   }
 }
 
-// --- Floating hearts ---
+window.onload = () => {
+  showNextIntro();
+  heartAnim();
+};
+
+// --- Floating Hearts ---
 function heartAnim() {
-  const canvas = document.getElementById("hearts"), ctx = canvas.getContext("2d");
+  const canvas = document.getElementById("hearts"),
+        ctx = canvas.getContext("2d");
 
   function sizeCanvas() {
     canvas.width = innerWidth;
@@ -104,30 +91,16 @@ function heartAnim() {
 
   function draw() {
     ctx.clearRect(0, 0, canvas.width, canvas.height);
-    for (let h of hearts) {
+    hearts.forEach(h => {
       ctx.beginPath();
       ctx.moveTo(h.x, h.y);
-      ctx.bezierCurveTo(
-        h.x - h.size / 2,
-        h.y - h.size / 2,
-        h.x - h.size,
-        h.y + h.size / 3,
-        h.x,
-        h.y + h.size
-      );
-      ctx.bezierCurveTo(
-        h.x + h.size,
-        h.y + h.size / 3,
-        h.x + h.size / 2,
-        h.y - h.size / 2,
-        h.x,
-        h.y
-      );
+      ctx.bezierCurveTo(h.x - h.size / 2, h.y - h.size / 2, h.x - h.size, h.y + h.size / 3, h.x, h.y + h.size);
+      ctx.bezierCurveTo(h.x + h.size, h.y + h.size / 3, h.x + h.size / 2, h.y - h.size / 2, h.x, h.y);
       ctx.fillStyle = h.color;
       ctx.fill();
       h.y -= h.speed;
       if (h.y < -100) h.y = canvas.height + 100;
-    }
+    });
     requestAnimationFrame(draw);
   }
   draw();
@@ -138,21 +111,20 @@ function init3D() {
   const ospin = document.getElementById("spin-container");
   const aImg = ospin.getElementsByTagName("img");
   const radius = 300;
-
   for (let i = 0; i < aImg.length; i++) {
     aImg[i].style.transform = `rotateY(${i * (360 / aImg.length)}deg) translateZ(${radius}px)`;
   }
   ospin.style.animation = `spin 40s infinite linear`;
-
   ospin.addEventListener("mouseenter", () => (ospin.style.animationPlayState = "paused"));
   ospin.addEventListener("mouseleave", () => (ospin.style.animationPlayState = "running"));
 }
 
+// Add keyframes programmatically
 const style = document.createElement("style");
 style.innerHTML = `@keyframes spin{from{transform:rotateY(0deg)}to{transform:rotateY(360deg)}}`;
 document.head.appendChild(style);
 
-// --- Confetti burst ---
+// --- Confetti Burst ---
 function confettiBurst() {
   const duration = 3000;
   const end = Date.now() + duration;
@@ -167,9 +139,3 @@ function confettiBurst() {
     if (Date.now() < end) requestAnimationFrame(frame);
   })();
 }
-
-// --- Window onload ---
-window.onload = () => {
-  showNextIntro();
-  heartAnim();
-};
