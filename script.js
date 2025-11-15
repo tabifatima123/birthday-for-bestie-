@@ -1,41 +1,33 @@
-// --- Playlist for two songs ---
-const songs = [
-  "music/ehdewafa.mp3",
-  "music/Shayar.mp3"
-];
-
+// --- Playlist: two songs ---
+const songs = ["music/ehdewafa.mp3", "music/Shayar.mp3"];
 const audio = document.getElementById("bg-music");
 let currentSong = 0;
 
 // Function to play song by index
 function playSong(index) {
   audio.src = songs[index];
-  audio.play().catch(() => {
-    console.log("Autoplay blocked. Tap to start music.");
-  });
+  audio.play().catch(() => console.log("Tap anywhere to start music"));
 }
 
-// Start the first song
-playSong(currentSong);
-
-// When a song ends, play the next
+// When a song ends, play next
 audio.addEventListener("ended", () => {
   currentSong++;
   if (currentSong >= songs.length) currentSong = 0; // loop playlist
   playSong(currentSong);
 });
 
-// --- Unmute for mobile/tap ---
-document.getElementById("unmute").addEventListener("click", () => {
+// Function to start audio safely (for mobile)
+function startAudio() {
   audio.muted = false;
   audio.volume = 1;
-  audio.play().catch(() => {});
-  document.getElementById("unmute").style.display = "none";
-});
-document.addEventListener('click', () => {
-  audio.muted = false;
-  audio.play().catch(() => {});
-}, { once: true });
+  playSong(currentSong);
+  const unmuteBtn = document.getElementById("unmute");
+  if (unmuteBtn) unmuteBtn.style.display = "none";
+}
+
+// Add user interaction to start audio
+document.getElementById("unmute").addEventListener("click", startAudio);
+document.addEventListener("click", startAudio, { once: true });
 
 // --- Intro Fade Sequence ---
 const texts = ["introText1", "introText2", "introText3"];
@@ -91,8 +83,8 @@ function heartAnim() {
     hearts.forEach(h => {
       ctx.beginPath();
       ctx.moveTo(h.x, h.y);
-      ctx.bezierCurveTo(h.x - h.size / 2, h.y - h.size / 2, h.x - h.size, h.y + h.size / 3, h.x, h.y + h.size);
-      ctx.bezierCurveTo(h.x + h.size, h.y + h.size / 3, h.x + h.size / 2, h.y - h.size / 2, h.x, h.y);
+      ctx.bezierCurveTo(h.x - h.size/2, h.y - h.size/2, h.x - h.size, h.y + h.size/3, h.x, h.y + h.size);
+      ctx.bezierCurveTo(h.x + h.size, h.y + h.size/3, h.x + h.size/2, h.y - h.size/2, h.x, h.y);
       ctx.fillStyle = h.color;
       ctx.fill();
       h.y -= h.speed;
@@ -116,7 +108,7 @@ function init3D() {
   ospin.addEventListener("mouseleave", () => (ospin.style.animationPlayState = "running"));
 }
 
-// Add keyframes programmatically
+// Add keyframes for spin
 const style = document.createElement("style");
 style.innerHTML = `@keyframes spin{from{transform:rotateY(0deg)}to{transform:rotateY(360deg)}}`;
 document.head.appendChild(style);
