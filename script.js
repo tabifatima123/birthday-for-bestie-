@@ -1,14 +1,72 @@
+// --- Playlist with crossfade ---
+const songs = ["music/ehdewafa.mp3", "music/shayar.mp3"];
+const audio = document.getElementById("bg-music");
+let currentSong = 0;
+const fadeDuration = 2000; // 2 seconds fade
+
+function playSong(index) {
+  audio.src = songs[index];
+  audio.volume = 0;
+  audio.play().catch(() => {});
+  fadeIn(audio);
+}
+
+function fadeIn(audioEl) {
+  let vol = 0;
+  const step = 0.02;
+  const interval = setInterval(() => {
+    vol = Math.min(1, vol + step);
+    audioEl.volume = vol;
+    if (vol >= 1) clearInterval(interval);
+  }, fadeDuration * step);
+}
+
+function fadeOut(audioEl, callback) {
+  let vol = audioEl.volume;
+  const step = 0.02;
+  const interval = setInterval(() => {
+    vol = Math.max(0, vol - step);
+    audioEl.volume = vol;
+    if (vol <= 0) {
+      clearInterval(interval);
+      if (callback) callback();
+    }
+  }, fadeDuration * step);
+}
+
+// Start first song
+playSong(currentSong);
+
+// When song ends, crossfade to next
+audio.addEventListener("ended", () => {
+  fadeOut(audio, () => {
+    currentSong = (currentSong + 1) % songs.length;
+    playSong(currentSong);
+  });
+});
+
+// --- Unmute for mobile / tap ---
+document.getElementById("unmute").addEventListener("click", () => {
+  audio.muted = false;
+  audio.volume = 0;
+  audio.play().catch(() => {});
+  fadeIn(audio);
+  document.getElementById("unmute").style.display = "none";
+});
+
+document.addEventListener('click', () => {
+  audio.muted = false;
+  audio.play().catch(() => {});
+}, { once: true });
+
 // --- Intro fade sequence ---
 const texts = ["introText1", "introText2", "introText3"];
 let current = 0;
 
 function showNextIntro() {
-  if (current > 0) {
-    document.getElementById(texts[current - 1]).style.opacity = 0;
-  }
+  if (current > 0) document.getElementById(texts[current - 1]).style.opacity = 0;
   if (current < texts.length) {
-    const el = document.getElementById(texts[current]);
-    el.style.opacity = 1;
+    document.getElementById(texts[current]).style.opacity = 1;
     current++;
     setTimeout(showNextIntro, 3000);
   } else {
@@ -22,23 +80,9 @@ function showNextIntro() {
   }
 }
 
-window.onload = () => {
-  showNextIntro();
-  heartAnim();
-};
-document.addEventListener('click', () => {
-  const audio = document.getElementById('bg-music');
-  if (audio) {
-    audio.muted = false;
-    audio.volume = 1;
-    audio.play().catch(() => {});
-  }
-}, { once: true });
-
 // --- Floating hearts ---
 function heartAnim() {
-  const canvas = document.getElementById("hearts"),
-    ctx = canvas.getContext("2d");
+  const canvas = document.getElementById("hearts"), ctx = canvas.getContext("2d");
 
   function sizeCanvas() {
     canvas.width = innerWidth;
@@ -100,17 +144,15 @@ function init3D() {
   }
   ospin.style.animation = `spin 40s infinite linear`;
 
-  // Pause on hover (nice touch)
   ospin.addEventListener("mouseenter", () => (ospin.style.animationPlayState = "paused"));
   ospin.addEventListener("mouseleave", () => (ospin.style.animationPlayState = "running"));
 }
 
-// Add keyframes programmatically (keeps CSS tidy)
 const style = document.createElement("style");
 style.innerHTML = `@keyframes spin{from{transform:rotateY(0deg)}to{transform:rotateY(360deg)}}`;
 document.head.appendChild(style);
 
-// --- Confetti burst when gallery appears ---
+// --- Confetti burst ---
 function confettiBurst() {
   const duration = 3000;
   const end = Date.now() + duration;
@@ -126,74 +168,8 @@ function confettiBurst() {
   })();
 }
 
-// --- Unmute toggle for mobile (for <audio>) ---
-document.getElementById("unmute")?.addEventListener("click", () => {
-  const audio = document.getElementById("bg-music");
-  if (!audio) return;
-  audio.muted = false;
-  audio.volume = 0; // start low then fade
-  audio.play().catch(() => {});
-  let v = 0;
-  const fade = setInterval(() => {
-    v = Math.min(1, v + 0.05);
-    audio.volume = v;
-    if (v >= 1) clearInterval(fade);
-  }, 120);
-  document.getElementById("unmute").style.display = "none";
-});
-
-// 🌸 Smooth fade-in for background music (when autoplay is allowed)
-window.addEventListener("DOMContentLoaded", () => {
-  const audio = document.getElementById("bg-music");
-  if (!audio) return;
-
-  // Many mobile browsers start audio muted unless user interacts.
-  // We'll try to play quietly; if blocked, the unmute button handles it.
-  audio.volume = 0;
-  audio.play().then(() => {
-    let vol = 0;
-    const fade = setInterval(() => {
-      vol = Math.min(1, vol + 0.02);
-      audio.volume = vol;
-      if (vol >= 1) clearInterval(fade);
-    }, 100);
-  }).catch(() => {
-    // Autoplay blocked — keep the unmute pill visible
-  });
-});
-// Playlist for two songs
-const songs = [
-  "music/ehdewafa.mp3",
-  "music/shayar.mp3"
-];
-
-const audio = document.getElementById("bg-music");
-let currentSong = 0;
-
-// Function to play a song by index
-function playSong(index) {
-  audio.src = songs[index];
-  audio.play().catch(() => {});
-}
-
-// Play the first song
-playSong(currentSong);
-
-// When a song ends, play the next one
-audio.addEventListener("ended", () => {
-  currentSong++;
-  if (currentSong < songs.length) {
-    playSong(currentSong);
-  } else {
-    currentSong = 0; // optional: loop back to first song
-    playSong(currentSong);
-  }
-});
-
-// Unmute for mobile / autoplay
-document.getElementById("unmute").addEventListener("click", () => {
-  audio.muted = false;
-  audio.volume = 1;
-  audio.play().catch(() => {});
-  document.getElementById("unmute").style.display = "none";
-});
+// --- Window onload ---
+window.onload = () => {
+  showNextIntro();
+  heartAnim();
+};
