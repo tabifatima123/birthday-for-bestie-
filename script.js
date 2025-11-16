@@ -1,5 +1,5 @@
 // --- Playlist: two songs ---
-const songs = ["music/ehdewafa.mp3", "music/Shayar.mp3"];
+const songs = ["music/tukrtukr.mp3", "music/Shayar.mp3"];
 const audio = document.getElementById("bg-music");
 let currentSong = 0;
 
